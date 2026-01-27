@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Nuevo Hábito - HabitIQ{% endblock %}
+
+{% block content %}
+<div class="form-page">
+    <div class="form-header">
+        <a href="{{ url_for('habits.list_habits') }}" class="back-link">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
+        <h1><i class="fas fa-plus-circle"></i> Crear Nuevo Hábito</h1>
+        <p>Define un nuevo hábito para seguir en tu rutina diaria</p>
+    </div>
+    
+    <div class="form-container">
+        <form method="POST" action="{{ url_for('habits.create_habit') }}" class="habit-form">
+            <div class="form-group">
+                <label for="name">
+                    <i class="fas fa-heading"></i> Nombre del Hábito *
+                </label>
+                <input type="text" 
+                       id="name" 
+                       name="name" 
+                       required
+                       maxlength="100"
+                       placeholder="Ej: Ejercicio 30 minutos, Leer 20 páginas"
+                       class="form-input">
+                <small class="form-help">Describe claramente el hábito que quieres desarrollar</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="description">
+                    <i class="fas fa-align-left"></i> Descripción (opcional)
+                </label>
+                <textarea id="description" 
+                          name="description" 
+                          rows="3"
+                          placeholder="Motivación, detalles específicos, beneficios..."
+                          class="form-textarea"></textarea>
+                <small class="form-help">¿Por qué es importante este hábito para ti?</small>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="category">
+                        <i class="fas fa-tag"></i> Categoría *
+                    </label>
+                    <select id="category" name="category" required class="form-select">
+                        <option value="" disabled selected>Selecciona una categoría</option>
+                        {% for category in categories %}
+                            <option value="{{ category }}">{{ category|capitalize }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="frequency">
+                        <i class="fas fa-calendar-alt"></i> Frecuencia *
+                    </label>
+                    <select id="frequency" name="frequency" required class="form-select">
+                        <option value="daily" selected>Diario</option>
+                        <option value="weekly">Semanal</option>
+                        <option value="monthly">Mensual</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-tips">
+                <h4><i class="fas fa-lightbulb"></i> Consejos para crear hábitos efectivos:</h4>
+                <ul>
+                    <li>Comienza con hábitos pequeños y alcanzables</li>
+                    <li>Asocia el nuevo hábito con uno existente</li>
+                    <li>Celebra tus pequeños logros</li>
+                    <li>Sé consistente, no perfecto</li>
+                </ul>
+            </div>
+            
+            <div class="form-actions">
+                <a href="{{ url_for('habits.list_habits') }}" class="btn btn-outline">
+                    Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Crear Hábito
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

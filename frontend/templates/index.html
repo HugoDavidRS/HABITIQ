@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Mis Hábitos - HabitIQ{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><i class="fas fa-list-check"></i> Mis Hábitos</h1>
+    <p>Gestiona todos tus hábitos en un solo lugar</p>
+</div>
+
+<div class="actions-bar">
+    <a href="{{ url_for('habits.create_habit') }}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Crear Nuevo Hábito
+    </a>
+    <div class="stats-summary">
+        <span class="stat-item">
+            <i class="fas fa-fire"></i>
+            <strong>{{ habits|length }}</strong> hábitos
+        </span>
+    </div>
+</div>
+
+{% if habits %}
+    <div class="habits-grid">
+        {% for habit in habits %}
+            <div class="habit-card {% if not habit.is_active %}inactive{% endif %}">
+                <div class="habit-header">
+                    <h3>{{ habit.name }}</h3>
+                    <div class="habit-actions">
+                        <a href="{{ url_for('habits.edit_habit', habit_id=habit.id) }}" 
+                           class="btn-icon" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <form action="{{ url_for('habits.delete_habit', habit_id=habit.id) }}" 
+                              method="POST" class="delete-form"
+                              onsubmit="return confirm('¿Eliminar este hábito?');">
+                            <button type="submit" class="btn-icon btn-delete" title="Eliminar">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                {% if habit.description %}
+                    <p class="habit-description">{{ habit.description }}</p>
+                {% endif %}
+                
+                <div class="habit-meta">
+                    <span class="category-badge category-{{ habit.category }}">
+                        <i class="fas fa-tag"></i> {{ habit.category|capitalize }}
+                    </span>
+                    <span class="frequency">
+                        <i class="fas fa-calendar"></i> {{ habit.frequency }}
+                    </span>
+                </div>
+                
+                <div class="habit-stats">
+                    <div class="stat">
+                        <small>Racha Actual</small>
+                        <div class="streak">
+                            <i class="fas fa-fire"></i> {{ habit.current_streak }} días
+                        </div>
+                    </div>
+                    <div class="stat">
+                        <small>Mejor Racha</small>
+                        <div class="best-streak">
+                            <i class="fas fa-trophy"></i> {{ habit.best_streak }} días
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="habit-footer">
+                    <form action="{{ url_for('habits.toggle_complete', habit_id=habit.id) }}" 
+                          method="POST" class="complete-form">
+                        <button type="submit" class="btn {% if habit.completed_today %}btn-completed{% else %}btn-outline{% endif %}">
+                            {% if habit.completed_today %}
+                                <i class="fas fa-check-circle"></i> Completado
+                            {% else %}
+                                <i class="far fa-circle"></i> Marcar como hecho
+                            {% endif %}
+                        </button>
+                    </form>
+                    
+                    <span class="habit-date">
+                        Creado: {{ habit.created_at.strftime('%d/%m/%Y') }}
+                    </span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state">
+        <div class="empty-icon">
+            <i class="fas fa-clipboard-list fa-3x"></i>
+        </div>
+        <h3>No hay hábitos registrados</h3>
+        <p>Comienza creando tu primer hábito para mejorar tu rutina diaria.</p>
+        <a href="{{ url_for('habits.create_habit') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Crear mi primer hábito
+        </a>
+    </div>
+{% endif %}
+{% endblock %}

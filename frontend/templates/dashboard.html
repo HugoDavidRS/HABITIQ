@@ -1,0 +1,236 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - HabitIQ{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <div class="welcome-section">
+        <h1><i class="fas fa-chart-line"></i> Dashboard</h1>
+        <p class="subtitle">Seguimiento de hábitos - {{ today.strftime('%d de %B, %Y') }}</p>
+    </div>
+    
+    <div class="quick-stats">
+        <div class="stat-card">
+            <div class="stat-icon total-habits">
+                <i class="fas fa-list-check"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ habits|length }}</h3>
+                <p>Hábitos Totales</p>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon completed">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ habits|selectattr('completed_today')|list|length }}</h3>
+                <p>Completados Hoy</p>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon categories">
+                <i class="fas fa-tags"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ categories|length }}</h3>
+                <p>Categorías</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Hábitos de Hoy -->
+<section class="today-section">
+    <div class="section-header">
+        <h2><i class="fas fa-calendar-day"></i> Hábitos para Hoy</h2>
+        <a href="{{ url_for('habits.list_habits') }}" class="btn btn-outline">
+            Ver Todos <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+    
+    {% if habits %}
+        <div class="today-habits">
+            {% for habit in habits %}
+                <div class="today-habit {% if habit.completed_today %}completed{% endif %}">
+                    <div class="habit-check">
+                        <form action="{{ url_for('habits.toggle_complete', habit_id=habit.id) }}" 
+                              method="POST" class="complete-form-ajax">
+                            <button type="submit" class="check-btn {% if habit.completed_today %}checked{% endif %}">
+                                <i class="fas fa-check"></i>
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div class="habit-details">
+                        <h4>{{ habit.name }}</h4>
+                        {% if habit.description %}
+                            <p class="habit-desc">{{ habit.description }}</p>
+                        {% endif %}
+                        <div class="habit-tags">
+                            <span class="tag category">{{ habit.category|capitalize }}</span>
+                            {% if habit.current_streak > 0 %}
+                                <span class="tag streak">
+                                    <i class="fas fa-fire"></i> {{ habit.current_streak }} días
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="habit-actions">
+                        <a href="{{ url_for('habits.edit_habit', habit_id=habit.id) }}" 
+                           class="btn-icon small">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state today-empty">
+            <i class="fas fa-sun fa-2x"></i>
+            <h4>No hay hábitos para hoy</h4>
+            <p>Crea nuevos hábitos para comenzar a seguir tu progreso.</p>
+            <a href="{{ url_for('habits.create_habit') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Crear Hábito
+            </a>
+        </div>
+    {% endif %}
+</section>
+
+<!-- Hábitos por Categoría -->
+<section class="categories-section">
+    <div class="section-header">
+        <h2><i class="fas fa-folder-tree"></i> Por Categoría</h2>
+    </div>
+    
+    {% if categories %}
+        <div class="categories-grid">
+            {% for category, category_habits in categories.items() %}
+                <div class="category-card">
+                    <div class="category-header">
+                        <h3>
+                            <i class="fas fa-folder"></i>
+                            {{ category|capitalize }}
+                        </h3>
+                        <span class="count-badge">{{ category_habits|length }}</span>
+                    </div>
+                    
+                    <ul class="category-habits">
+                        {% for habit in category_habits[:5] %}
+                            <li class="category-habit {% if habit.completed_today %}completed{% endif %}">
+                                <span class="habit-name">{{ habit.name }}</span>
+                                {% if habit.completed_today %}
+                                    <i class="fas fa-check completed-icon"></i>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                        
+                        {% if category_habits|length > 5 %}
+                            <li class="more-items">
+                                +{{ category_habits|length - 5 }} más
+                            </li>
+                        {% endif %}
+                    </ul>
+                    
+                    <div class="category-footer">
+                        <span class="completion-rate">
+                            {% set completed_count = category_habits|selectattr('completed_today')|list|length %}
+                            {{ ((completed_count / category_habits|length) * 100)|round|int if category_habits|length > 0 else 0 }}% completado
+                        </span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</section>
+
+<!-- Acciones Rápidas -->
+<section class="quick-actions">
+    <h2><i class="fas fa-bolt"></i> Acciones Rápidas</h2>
+    <div class="actions-grid">
+        <a href="{{ url_for('habits.create_habit') }}" class="action-card">
+            <div class="action-icon">
+                <i class="fas fa-plus-circle"></i>
+            </div>
+            <h4>Nuevo Hábito</h4>
+            <p>Crea un nuevo hábito para seguir</p>
+        </a>
+        
+        <a href="{{ url_for('habits.list_habits') }}" class="action-card">
+            <div class="action-icon">
+                <i class="fas fa-list"></i>
+            </div>
+            <h4>Ver Todos</h4>
+            <p>Lista completa de hábitos</p>
+        </a>
+        
+        <div class="action-card">
+            <div class="action-icon">
+                <i class="fas fa-chart-bar"></i>
+            </div>
+            <h4>Estadísticas</h4>
+            <p>Próximamente...</p>
+        </div>
+        
+        <div class="action-card">
+            <div class="action-icon">
+                <i class="fas fa-cog"></i>
+            </div>
+            <h4>Ajustes</h4>
+            <p>Próximamente...</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // AJAX para completar hábitos
+    const forms = document.querySelectorAll('.complete-form-ajax');
+    
+    forms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const button = this.querySelector('.check-btn');
+            const habitCard = this.closest('.today-habit');
+            
+            // Enviar petición AJAX
+            fetch(this.action, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams(new FormData(this))
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Toggle visual
+                    button.classList.toggle('checked');
+                    habitCard.classList.toggle('completed');
+                    
+                    // Actualizar contador
+                    updateCounter();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+    
+    function updateCounter() {
+        // Esta función actualizaría el contador de completados
+        // Implementación básica para futuras mejoras
+        const completedCount = document.querySelectorAll('.today-habit.completed').length;
+        console.log('Completados:', completedCount);
+    }
+});
+</script>
+{% endblock %}
