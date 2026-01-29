@@ -22,6 +22,7 @@ Una aplicación web para gestión de hábitos diarios desarrollada con Python Fl
 
 ## Estructura del Proyecto
 
+```
 HabitIQ/
 ├── README.md
 ├── requirements.txt
@@ -72,3 +73,4 @@ HabitIQ/
 │
 └── scripts/
     └── init_db.py
+```
