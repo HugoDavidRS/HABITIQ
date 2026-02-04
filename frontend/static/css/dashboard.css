@@ -1,0 +1,57 @@
+/* dashboard.css — estilos para el panel (dashboard) */
+:root {
+  --bg: #f6f8fa;
+  --card-bg: #ffffff;
+  --primary: #2b6cb0;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --radius: 8px;
+}
+
+.dashboard {
+  padding: 24px;
+  background: var(--bg);
+  min-height: 100vh;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.dashboard-title {
+  font-size: 1.5rem;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+  padding: 16px;
+  color: var(--text);
+}
+
+.card .card-title {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.card .card-value {
+  font-size: 1.25rem;
+  color: var(--primary);
+}
+
+@media (max-width: 600px) {
+  .dashboard { padding: 12px; }
+  .card-grid { gap: 12px; }
+}

@@ -1048,3 +1048,412 @@ button, input, textarea, select {
 .p-1 { padding: var(--spacing-sm); }
 .p-2 { padding: var(--spacing-md); }
 .p-3 { padding: var(--spacing-lg); }
+
+/* ===== ESTILOS ADICIONALES PARA INDEX.HTML ===== */
+
+/* Para el header específico de index.html */
+.page-header h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+}
+
+.page-header h1 i {
+    font-size: 2rem;
+}
+
+/* Mejoras para actions-bar */
+.actions-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-lg);
+    background: white;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--spacing-xl);
+}
+
+.stats-summary {
+    display: flex;
+    gap: var(--spacing-xl);
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    color: var(--gray-dark);
+}
+
+.stat-item i {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+.stat-item strong {
+    color: var(--dark-color);
+    font-size: 1.3rem;
+    margin-left: var(--spacing-xs);
+}
+
+/* Mejoras para habit-card */
+.habit-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.habit-card.inactive::before {
+    content: 'PAUSADO';
+    position: absolute;
+    top: 10px;
+    right: -30px;
+    background: var(--gray-medium);
+    color: white;
+    padding: var(--spacing-xs) var(--spacing-xl);
+    transform: rotate(45deg);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+/* Botones de estado (activar/desactivar) */
+.habit-state {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.btn-status {
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--border-radius-sm);
+    border: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.btn-active {
+    background-color: rgba(76, 201, 240, 0.2);
+    color: #4cc9f0;
+}
+
+.btn-active:hover {
+    background-color: rgba(76, 201, 240, 0.3);
+}
+
+.btn-inactive {
+    background-color: rgba(108, 117, 125, 0.2);
+    color: var(--gray-dark);
+}
+
+.btn-inactive:hover {
+    background-color: rgba(108, 117, 125, 0.3);
+}
+
+/* Mejoras para habit-footer */
+.habit-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--gray-light);
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+}
+
+.complete-form {
+    margin: 0;
+}
+
+.habit-date {
+    color: var(--gray-medium);
+    font-size: 0.85rem;
+}
+
+/* Estados específicos para botones */
+.btn-completed {
+    background-color: var(--success-color);
+    color: white;
+    border: none;
+}
+
+.btn-completed:hover {
+    background-color: #3db8d8;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-outline:hover {
+    background-color: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* ===== ESTILOS PARA DASHBOARD ===== */
+
+/* Grid principal del dashboard */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+/* Tarjetas de estadísticas */
+.dashboard-card {
+    background: white;
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-normal);
+}
+
+.dashboard-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.dashboard-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--dark-color);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+/* Motivación */
+.motivation-card {
+    background: linear-gradient(135deg, #4361ee 0%, #3a56d4 100%);
+    color: white;
+    padding: var(--spacing-xl);
+    border-radius: var(--border-radius-lg);
+    text-align: center;
+    margin-top: var(--spacing-xl);
+    box-shadow: var(--shadow-lg);
+}
+
+.motivation-card i {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-md);
+    opacity: 0.8;
+}
+
+.quote {
+    font-size: 1.25rem;
+    font-style: italic;
+    margin: var(--spacing-md) 0;
+    line-height: 1.6;
+}
+
+.author {
+    opacity: 0.8;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* ===== ESTILOS PARA FORMULARIOS EDIT.HTML ===== */
+
+/* Grid de estadísticas en formulario de edición */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+    margin: var(--spacing-lg) 0;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: var(--gray-light);
+    border-radius: var(--border-radius-md);
+}
+
+.stat-item i {
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.stat-info h3 {
+    font-size: 1.8rem;
+    margin: 0;
+    color: var(--dark-color);
+}
+
+.stat-info p {
+    margin: 0;
+    color: var(--gray-medium);
+    font-size: 0.9rem;
+}
+
+/* ===== RESPONSIVE ADICIONAL ===== */
+
+@media (max-width: 768px) {
+    .actions-bar {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        text-align: center;
+    }
+    
+    .stats-summary {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .habit-footer {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+    
+    .habit-state {
+        justify-content: center;
+    }
+    
+    .habit-date {
+        text-align: center;
+        margin-top: var(--spacing-sm);
+    }
+    
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .habit-stats {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-sm);
+    }
+    
+    .habit-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-sm);
+    }
+    
+    .category-badge, .frequency {
+        width: fit-content;
+    }
+}
+
+/* ===== ANIMACIONES ===== */
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* ===== UTILIDADES ADICIONALES ===== */
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.gap-1 { gap: var(--spacing-sm); }
+.gap-2 { gap: var(--spacing-md); }
+.gap-3 { gap: var(--spacing-lg); }
+
+.text-success { color: var(--success-color); }
+.text-warning { color: var(--warning-color); }
+.text-danger { color: var(--danger-color); }
+.text-primary { color: var(--primary-color); }
+
+.bg-success { background-color: rgba(76, 201, 240, 0.1); }
+.bg-warning { background-color: rgba(248, 150, 30, 0.1); }
+.bg-danger { background-color: rgba(249, 65, 68, 0.1); }
+.bg-primary { background-color: rgba(67, 97, 238, 0.1); }
+
+/* ===== ESTILOS PARA CATEGORÍAS DINÁMICAS ===== */
+
+.category-health { 
+    background-color: rgba(76, 201, 240, 0.1); 
+    color: #4cc9f0; 
+}
+
+.category-fitness { 
+    background-color: rgba(247, 37, 133, 0.1); 
+    color: #f72585; 
+}
+
+.category-learning { 
+    background-color: rgba(114, 9, 183, 0.1); 
+    color: #7209b7; 
+}
+
+.category-productivity { 
+    background-color: rgba(67, 97, 238, 0.1); 
+    color: #4361ee; 
+}
+
+.category-mindfulness { 
+    background-color: rgba(248, 150, 30, 0.1); 
+    color: #f8961e; 
+}
+
+.category-finance { 
+    background-color: rgba(46, 125, 50, 0.1); 
+    color: #2e7d32; 
+}
+
+.category-social { 
+    background-color: rgba(156, 39, 176, 0.1); 
+    color: #9c27b0; 
+}
+
+.category-general { 
+    background-color: rgba(158, 158, 158, 0.1); 
+    color: #616161; 
+}
+
+/* Íconos por categoría */
+.category-health i { color: #4cc9f0; }
+.category-fitness i { color: #f72585; }
+.category-learning i { color: #7209b7; }
+.category-productivity i { color: #4361ee; }
+.category-mindfulness i { color: #f8961e; }
+.category-finance i { color: #2e7d32; }
+.category-social i { color: #9c27b0; }
+.category-general i { color: #616161; }

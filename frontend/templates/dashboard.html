@@ -15,7 +15,7 @@
                 <i class="fas fa-list-check"></i>
             </div>
             <div class="stat-info">
-                <h3>{{ habits|length }}</h3>
+                <h3 id="total-habits">{{ total_habits }}</h3>
                 <p>Hábitos Totales</p>
             </div>
         </div>
@@ -25,7 +25,7 @@
                 <i class="fas fa-check-circle"></i>
             </div>
             <div class="stat-info">
-                <h3>{{ habits|selectattr('completed_today')|list|length }}</h3>
+                <h3 id="completed-today">{{ completed_today }}</h3>
                 <p>Completados Hoy</p>
             </div>
         </div>
@@ -35,7 +35,7 @@
                 <i class="fas fa-tags"></i>
             </div>
             <div class="stat-info">
-                <h3>{{ categories|length }}</h3>
+                <h3 id="total-categories">{{ categories|length }}</h3>
                 <p>Categorías</p>
             </div>
         </div>
@@ -46,7 +46,7 @@
 <section class="today-section">
     <div class="section-header">
         <h2><i class="fas fa-calendar-day"></i> Hábitos para Hoy</h2>
-        <a href="{{ url_for('habits.list_habits') }}" class="btn btn-outline">
+        <a href="{{ url_for('index') }}" class="btn btn-outline">
             Ver Todos <i class="fas fa-arrow-right"></i>
         </a>
     </div>
@@ -54,11 +54,12 @@
     {% if habits %}
         <div class="today-habits">
             {% for habit in habits %}
-                <div class="today-habit {% if habit.completed_today %}completed{% endif %}">
+                <div class="today-habit {% if habit.completed_today %}completed{% endif %}" id="habit-{{ habit.id }}">
                     <div class="habit-check">
-                        <form action="{{ url_for('habits.toggle_complete', habit_id=habit.id) }}" 
-                              method="POST" class="complete-form-ajax">
-                            <button type="submit" class="check-btn {% if habit.completed_today %}checked{% endif %}">
+                        <form action="{{ url_for('toggle_complete', habit_id=habit.id) }}" 
+                              method="POST" class="complete-form">
+                            <button type="submit" class="check-btn {% if habit.completed_today %}checked{% endif %}" 
+                                    data-habit-id="{{ habit.id }}">
                                 <i class="fas fa-check"></i>
                             </button>
                         </form>
@@ -70,18 +71,21 @@
                             <p class="habit-desc">{{ habit.description }}</p>
                         {% endif %}
                         <div class="habit-tags">
-                            <span class="tag category">{{ habit.category|capitalize }}</span>
+                            <span class="tag category category-{{ habit.category }}">
+                                <i class="fas fa-{{ 'heartbeat' if habit.category == 'health' else 'running' if habit.category == 'fitness' else 'book' if habit.category == 'learning' else 'briefcase' if habit.category == 'productivity' else 'brain' if habit.category == 'mindfulness' else 'dollar-sign' if habit.category == 'finance' else 'users' if habit.category == 'social' else 'folder' }}"></i>
+                                {{ habit.category|capitalize }}
+                            </span>
                             {% if habit.current_streak > 0 %}
                                 <span class="tag streak">
-                                    <i class="fas fa-fire"></i> {{ habit.current_streak }} días
+                                    <i class="fas fa-fire"></i> <span class="streak-count">{{ habit.current_streak }}</span> días
                                 </span>
                             {% endif %}
                         </div>
                     </div>
                     
                     <div class="habit-actions">
-                        <a href="{{ url_for('habits.edit_habit', habit_id=habit.id) }}" 
-                           class="btn-icon small">
+                        <a href="{{ url_for('edit_habit', habit_id=habit.id) }}" 
+                           class="btn-icon small" title="Editar hábito">
                             <i class="fas fa-edit"></i>
                         </a>
                     </div>
@@ -93,7 +97,7 @@
             <i class="fas fa-sun fa-2x"></i>
             <h4>No hay hábitos para hoy</h4>
             <p>Crea nuevos hábitos para comenzar a seguir tu progreso.</p>
-            <a href="{{ url_for('habits.create_habit') }}" class="btn btn-primary">
+            <a href="{{ url_for('create_habit') }}" class="btn btn-primary">
                 <i class="fas fa-plus"></i> Crear Hábito
             </a>
         </div>
@@ -112,7 +116,7 @@
                 <div class="category-card">
                     <div class="category-header">
                         <h3>
-                            <i class="fas fa-folder"></i>
+                            <i class="fas fa-{{ 'heartbeat' if category == 'health' else 'running' if category == 'fitness' else 'book' if category == 'learning' else 'briefcase' if category == 'productivity' else 'brain' if category == 'mindfulness' else 'dollar-sign' if category == 'finance' else 'users' if category == 'social' else 'folder' }}"></i>
                             {{ category|capitalize }}
                         </h3>
                         <span class="count-badge">{{ category_habits|length }}</span>
@@ -120,7 +124,7 @@
                     
                     <ul class="category-habits">
                         {% for habit in category_habits[:5] %}
-                            <li class="category-habit {% if habit.completed_today %}completed{% endif %}">
+                            <li class="category-habit {% if habit.completed_today %}completed{% endif %}" id="cat-habit-{{ habit.id }}">
                                 <span class="habit-name">{{ habit.name }}</span>
                                 {% if habit.completed_today %}
                                     <i class="fas fa-check completed-icon"></i>
@@ -136,13 +140,19 @@
                     </ul>
                     
                     <div class="category-footer">
+                        {% set completed_count = category_habits|selectattr('completed_today')|list|length %}
                         <span class="completion-rate">
-                            {% set completed_count = category_habits|selectattr('completed_today')|list|length %}
                             {{ ((completed_count / category_habits|length) * 100)|round|int if category_habits|length > 0 else 0 }}% completado
                         </span>
                     </div>
                 </div>
             {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <i class="fas fa-folder-open fa-2x"></i>
+            <h4>No hay categorías</h4>
+            <p>Crea hábitos para verlos agrupados por categoría.</p>
         </div>
     {% endif %}
 </section>
@@ -151,7 +161,7 @@
 <section class="quick-actions">
     <h2><i class="fas fa-bolt"></i> Acciones Rápidas</h2>
     <div class="actions-grid">
-        <a href="{{ url_for('habits.create_habit') }}" class="action-card">
+        <a href="{{ url_for('create_habit') }}" class="action-card">
             <div class="action-icon">
                 <i class="fas fa-plus-circle"></i>
             </div>
@@ -159,7 +169,7 @@
             <p>Crea un nuevo hábito para seguir</p>
         </a>
         
-        <a href="{{ url_for('habits.list_habits') }}" class="action-card">
+        <a href="{{ url_for('index') }}" class="action-card">
             <div class="action-icon">
                 <i class="fas fa-list"></i>
             </div>
@@ -167,21 +177,21 @@
             <p>Lista completa de hábitos</p>
         </a>
         
-        <div class="action-card">
+        <a href="{{ url_for('index') }}" class="action-card">
             <div class="action-icon">
                 <i class="fas fa-chart-bar"></i>
             </div>
             <h4>Estadísticas</h4>
-            <p>Próximamente...</p>
-        </div>
+            <p>Ver progreso detallado</p>
+        </a>
         
-        <div class="action-card">
+        <a href="{{ url_for('create_habit') }}" class="action-card">
             <div class="action-icon">
-                <i class="fas fa-cog"></i>
+                <i class="fas fa-bullseye"></i>
             </div>
-            <h4>Ajustes</h4>
-            <p>Próximamente...</p>
-        </div>
+            <h4>Objetivos</h4>
+            <p>Define tus metas</p>
+        </a>
     </div>
 </section>
 {% endblock %}
@@ -190,7 +200,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // AJAX para completar hábitos
-    const forms = document.querySelectorAll('.complete-form-ajax');
+    const forms = document.querySelectorAll('.complete-form');
     
     forms.forEach(form => {
         form.addEventListener('submit', function(e) {
@@ -198,8 +208,15 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const button = this.querySelector('.check-btn');
             const habitCard = this.closest('.today-habit');
+            const habitId = button.dataset.habitId;
+            const habitName = habitCard.querySelector('h4').textContent;
+            const streakElement = habitCard.querySelector('.streak-count');
             
-            // Enviar petición AJAX
+            // Deshabilitar botón temporalmente para evitar doble clic
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            
+            // Enviar petición con header AJAX
             fetch(this.action, {
                 method: 'POST',
                 headers: {
@@ -208,29 +225,252 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: new URLSearchParams(new FormData(this))
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta del servidor');
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
-                    // Toggle visual
+                    // Toggle visual del botón
                     button.classList.toggle('checked');
+                    
+                    // Toggle clase completed en la tarjeta
                     habitCard.classList.toggle('completed');
                     
-                    // Actualizar contador
-                    updateCounter();
+                    // Actualizar contador de racha si existe
+                    if (streakElement) {
+                        streakElement.textContent = data.current_streak;
+                    } else if (data.current_streak > 0) {
+                        // Si no existe el elemento de racha pero ahora hay racha, crearlo
+                        const streakTag = habitCard.querySelector('.habit-tags');
+                        if (streakTag) {
+                            const newStreak = document.createElement('span');
+                            newStreak.className = 'tag streak';
+                            newStreak.innerHTML = `<i class="fas fa-fire"></i> <span class="streak-count">${data.current_streak}</span> días`;
+                            streakTag.appendChild(newStreak);
+                        }
+                    }
+                    
+                    // Actualizar icono en lista de categorías
+                    updateCategoryHabit(habitId, data.completed);
+                    
+                    // Mostrar notificación
+                    showNotification(
+                        data.completed 
+                            ? '¡Hábito completado! 🎉' 
+                            : 'Completación removida',
+                        data.habit_name
+                    );
+                    
+                    // Actualizar contador de completados hoy
+                    updateCompletedCounter(data.completed);
+                    
+                    // Actualizar porcentajes de categorías
+                    updateCategoryCompletion();
+                    
+                    // Efecto de confeti si se completó
+                    if (data.completed) {
+                        createConfetti();
+                    }
+                } else {
+                    throw new Error(data.message || 'Error desconocido');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
+                showNotification('Error', 'No se pudo actualizar el hábito', 'error');
+            })
+            .finally(() => {
+                // Restaurar botón
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-check"></i>';
             });
         });
     });
     
-    function updateCounter() {
-        // Esta función actualizaría el contador de completados
-        // Implementación básica para futuras mejoras
-        const completedCount = document.querySelectorAll('.today-habit.completed').length;
-        console.log('Completados:', completedCount);
+    function updateCompletedCounter(completed) {
+        // Actualizar el contador de completados hoy
+        const counterElement = document.getElementById('completed-today');
+        if (counterElement) {
+            let currentCount = parseInt(counterElement.textContent);
+            currentCount = completed ? currentCount + 1 : Math.max(0, currentCount - 1);
+            counterElement.textContent = currentCount;
+            
+            // Efecto visual
+            counterElement.classList.add('pulse');
+            setTimeout(() => {
+                counterElement.classList.remove('pulse');
+            }, 1000);
+        }
     }
+    
+    function updateCategoryHabit(habitId, completed) {
+        // Actualizar icono en la lista de categorías
+        const categoryHabit = document.getElementById(`cat-habit-${habitId}`);
+        if (categoryHabit) {
+            let icon = categoryHabit.querySelector('.completed-icon');
+            if (completed && !icon) {
+                // Añadir icono de completado
+                icon = document.createElement('i');
+                icon.className = 'fas fa-check completed-icon';
+                categoryHabit.appendChild(icon);
+                categoryHabit.classList.add('completed');
+            } else if (!completed && icon) {
+                // Remover icono de completado
+                icon.remove();
+                categoryHabit.classList.remove('completed');
+            }
+        }
+    }
+    
+    function updateCategoryCompletion() {
+        // Recalcular porcentajes de completado por categoría
+        document.querySelectorAll('.category-card').forEach(card => {
+            const habits = card.querySelectorAll('.category-habit:not(.more-items)');
+            if (habits.length > 0) {
+                const completed = card.querySelectorAll('.category-habit.completed').length;
+                const percentage = Math.round((completed / habits.length) * 100);
+                
+                const rateElement = card.querySelector('.completion-rate');
+                if (rateElement) {
+                    rateElement.textContent = `${percentage}% completado`;
+                    
+                    // Color basado en porcentaje
+                    if (percentage === 100) {
+                        rateElement.style.color = '#4cc9f0';
+                    } else if (percentage >= 50) {
+                        rateElement.style.color = '#f8961e';
+                    } else {
+                        rateElement.style.color = '#f94144';
+                    }
+                }
+            }
+        });
+    }
+    
+    function showNotification(title, message, type = 'success') {
+        // Crear elemento de notificación
+        const notification = document.createElement('div');
+        notification.className = `flash-message flash-${type}`;
+        notification.style.cssText = `
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            z-index: 9999;
+            animation: slideIn 0.3s ease;
+            max-width: 350px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        `;
+        
+        notification.innerHTML = `
+            <span><strong>${title}</strong><br>${message}</span>
+            <button class="flash-close" onclick="this.parentElement.remove()">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Auto-remover después de 3 segundos
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.style.animation = 'slideOut 0.3s ease forwards';
+                setTimeout(() => notification.remove(), 300);
+            }
+        }, 3000);
+    }
+    
+    function createConfetti() {
+        const colors = ['#4361ee', '#4cc9f0', '#f72585', '#7209b7', '#ff6b35'];
+        const confettiCount = 30;
+        
+        for (let i = 0; i < confettiCount; i++) {
+            const confetti = document.createElement('div');
+            confetti.style.position = 'fixed';
+            confetti.style.width = '10px';
+            confetti.style.height = '10px';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.top = '-20px';
+            confetti.style.zIndex = '9998';
+            confetti.style.pointerEvents = 'none';
+            confetti.style.opacity = '0.9';
+            
+            document.body.appendChild(confetti);
+            
+            // Animación
+            const animation = confetti.animate([
+                { 
+                    transform: 'translateY(0) rotate(0deg)', 
+                    opacity: 1 
+                },
+                { 
+                    transform: `translateY(${window.innerHeight}px) rotate(${Math.random() * 720}deg)`, 
+                    opacity: 0 
+                }
+            ], {
+                duration: 1000 + Math.random() * 1000,
+                easing: 'cubic-bezier(0.1, 0.8, 0.9, 0.2)'
+            });
+            
+            animation.onfinish = () => confetti.remove();
+        }
+    }
+    
+    // Agregar animaciones CSS si no existen
+    if (!document.querySelector('#animationsStyle')) {
+        const style = document.createElement('style');
+        style.id = 'animationsStyle';
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+            
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.1); }
+                100% { transform: scale(1); }
+            }
+            
+            .pulse {
+                animation: pulse 0.5s ease-in-out;
+            }
+            
+            .fa-spinner {
+                animation: spin 1s linear infinite;
+            }
+            
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    // Actualizar estadísticas automáticamente cada 30 segundos
+    function refreshStats() {
+        fetch('/api/dashboard/stats')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('total-habits').textContent = data.total_habits;
+                document.getElementById('completed-today').textContent = data.completed_today;
+                document.getElementById('total-categories').textContent = Object.keys(categories).length;
+            })
+            .catch(error => console.error('Error actualizando estadísticas:', error));
+    }
+    
+    // Actualizar cada 30 segundos
+    setInterval(refreshStats, 30000);
 });
 </script>
 {% endblock %}

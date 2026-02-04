@@ -9,13 +9,17 @@
 </div>
 
 <div class="actions-bar">
-    <a href="{{ url_for('habits.create_habit') }}" class="btn btn-primary">
+    <a href="{{ url_for('create_habit') }}" class="btn btn-primary">
         <i class="fas fa-plus"></i> Crear Nuevo Hábito
     </a>
     <div class="stats-summary">
         <span class="stat-item">
             <i class="fas fa-fire"></i>
-            <strong>{{ habits|length }}</strong> hábitos
+            <strong>{{ habits|length }}</strong> hábitos totales
+        </span>
+        <span class="stat-item">
+            <i class="fas fa-check-circle"></i>
+            <strong>{{ habits|selectattr('is_active')|list|length }}</strong> activos
         </span>
     </div>
 </div>
@@ -27,13 +31,13 @@
                 <div class="habit-header">
                     <h3>{{ habit.name }}</h3>
                     <div class="habit-actions">
-                        <a href="{{ url_for('habits.edit_habit', habit_id=habit.id) }}" 
+                        <a href="{{ url_for('edit_habit', habit_id=habit.id) }}" 
                            class="btn-icon" title="Editar">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <form action="{{ url_for('habits.delete_habit', habit_id=habit.id) }}" 
+                        <form action="{{ url_for('delete_habit', habit_id=habit.id) }}" 
                               method="POST" class="delete-form"
-                              onsubmit="return confirm('¿Eliminar este hábito?');">
+                              onsubmit="return confirm('¿Estás seguro de eliminar este hábito?');">
                             <button type="submit" class="btn-icon btn-delete" title="Eliminar">
                                 <i class="fas fa-trash"></i>
                             </button>
@@ -47,10 +51,11 @@
                 
                 <div class="habit-meta">
                     <span class="category-badge category-{{ habit.category }}">
-                        <i class="fas fa-tag"></i> {{ habit.category|capitalize }}
+                        <i class="fas fa-{{ 'heartbeat' if habit.category == 'health' else 'running' if habit.category == 'fitness' else 'book' if habit.category == 'learning' else 'briefcase' if habit.category == 'productivity' else 'brain' }}">
+                        </i> {{ habit.category|capitalize }}
                     </span>
                     <span class="frequency">
-                        <i class="fas fa-calendar"></i> {{ habit.frequency }}
+                        <i class="fas fa-calendar"></i> {{ habit.frequency|capitalize }}
                     </span>
                 </div>
                 
@@ -70,16 +75,25 @@
                 </div>
                 
                 <div class="habit-footer">
-                    <form action="{{ url_for('habits.toggle_complete', habit_id=habit.id) }}" 
+                    <form action="{{ url_for('toggle_complete', habit_id=habit.id) }}" 
                           method="POST" class="complete-form">
-                        <button type="submit" class="btn {% if habit.completed_today %}btn-completed{% else %}btn-outline{% endif %}">
-                            {% if habit.completed_today %}
+                        <button type="submit" class="btn {% if is_completed_today(habit.id) %}btn-completed{% else %}btn-outline{% endif %}">
+                            {% if is_completed_today(habit.id) %}
                                 <i class="fas fa-check-circle"></i> Completado
                             {% else %}
                                 <i class="far fa-circle"></i> Marcar como hecho
                             {% endif %}
                         </button>
                     </form>
+                    
+                    <div class="habit-state">
+                        <form action="{{ url_for('toggle_habit', habit_id=habit.id) }}" method="POST" style="display: inline;">
+                            <button type="submit" class="btn-status {% if habit.is_active %}btn-active{% else %}btn-inactive{% endif %}">
+                                <i class="fas fa-{{ 'play' if not habit.is_active else 'pause' }}"></i>
+                                {{ 'Activar' if not habit.is_active else 'Pausar' }}
+                            </button>
+                        </form>
+                    </div>
                     
                     <span class="habit-date">
                         Creado: {{ habit.created_at.strftime('%d/%m/%Y') }}
@@ -95,7 +109,7 @@
         </div>
         <h3>No hay hábitos registrados</h3>
         <p>Comienza creando tu primer hábito para mejorar tu rutina diaria.</p>
-        <a href="{{ url_for('habits.create_habit') }}" class="btn btn-primary">
+        <a href="{{ url_for('create_habit') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Crear mi primer hábito
         </a>
     </div>

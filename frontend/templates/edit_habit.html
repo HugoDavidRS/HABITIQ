@@ -5,15 +5,15 @@
 {% block content %}
 <div class="form-page">
     <div class="form-header">
-        <a href="{{ url_for('habits.list_habits') }}" class="back-link">
+        <a href="{{ url_for('index') }}" class="back-link">
             <i class="fas fa-arrow-left"></i> Volver
         </a>
         <h1><i class="fas fa-edit"></i> Editar Hábito</h1>
-        <p>Modifica los detalles de "{{ habit.name }}"</p>
+        <p>Modifica los detalles de tu hábito</p>
     </div>
     
     <div class="form-container">
-        <form method="POST" action="{{ url_for('habits.edit_habit', habit_id=habit.id) }}" class="habit-form">
+        <form method="POST" action="{{ url_for('edit_habit', habit_id=habit.id) }}" class="habit-form">
             <div class="form-group">
                 <label for="name">
                     <i class="fas fa-heading"></i> Nombre del Hábito *
@@ -24,17 +24,21 @@
                        required
                        maxlength="100"
                        value="{{ habit.name }}"
+                       placeholder="Ej: Ejercicio 30 minutos, Leer 20 páginas"
                        class="form-input">
+                <small class="form-help">Describe claramente el hábito</small>
             </div>
             
             <div class="form-group">
                 <label for="description">
-                    <i class="fas fa-align-left"></i> Descripción
+                    <i class="fas fa-align-left"></i> Descripción (opcional)
                 </label>
                 <textarea id="description" 
                           name="description" 
                           rows="3"
+                          placeholder="Motivación, detalles específicos, beneficios..."
                           class="form-textarea">{{ habit.description or '' }}</textarea>
+                <small class="form-help">¿Por qué es importante este hábito para ti?</small>
             </div>
             
             <div class="form-row">
@@ -43,9 +47,9 @@
                         <i class="fas fa-tag"></i> Categoría *
                     </label>
                     <select id="category" name="category" required class="form-select">
+                        <option value="" disabled>Selecciona una categoría</option>
                         {% for category in categories %}
-                            <option value="{{ category }}" 
-                                    {% if category == habit.category %}selected{% endif %}>
+                            <option value="{{ category }}" {% if category == habit.category %}selected{% endif %}>
                                 {{ category|capitalize }}
                             </option>
                         {% endfor %}
@@ -57,63 +61,42 @@
                         <i class="fas fa-calendar-alt"></i> Frecuencia *
                     </label>
                     <select id="frequency" name="frequency" required class="form-select">
-                        <option value="daily" {% if habit.frequency == 'daily' %}selected{% endif %}>
-                            Diario
-                        </option>
-                        <option value="weekly" {% if habit.frequency == 'weekly' %}selected{% endif %}>
-                            Semanal
-                        </option>
-                        <option value="monthly" {% if habit.frequency == 'monthly' %}selected{% endif %}>
-                            Mensual
-                        </option>
+                        <option value="daily" {% if habit.frequency == 'daily' %}selected{% endif %}>Diario</option>
+                        <option value="weekly" {% if habit.frequency == 'weekly' %}selected{% endif %}>Semanal</option>
+                        <option value="monthly" {% if habit.frequency == 'monthly' %}selected{% endif %}>Mensual</option>
                     </select>
                 </div>
             </div>
             
-            <div class="form-group">
-                <label class="checkbox-label">
-                    <input type="checkbox" 
-                           name="is_active" 
-                           value="true"
-                           {% if habit.is_active %}checked{% endif %}>
-                    <span class="checkmark"></span>
-                    Hábito activo (mostrar en el dashboard)
-                </label>
-                <small class="form-help">Desmarca para archivar el hábito sin eliminarlo</small>
-            </div>
-            
-            <div class="habit-stats-display">
-                <h4><i class="fas fa-chart-line"></i> Estadísticas del Hábito:</h4>
+            <div class="habit-stats">
+                <h4><i class="fas fa-chart-line"></i> Estadísticas del Hábito</h4>
                 <div class="stats-grid">
-                    <div class="stat-display">
-                        <span class="stat-label">Racha Actual</span>
-                        <span class="stat-value streak">
-                            <i class="fas fa-fire"></i> {{ habit.current_streak }} días
-                        </span>
+                    <div class="stat-item">
+                        <i class="fas fa-fire"></i>
+                        <div class="stat-info">
+                            <h3>{{ habit.current_streak }}</h3>
+                            <p>Racha Actual</p>
+                        </div>
                     </div>
-                    <div class="stat-display">
-                        <span class="stat-label">Mejor Racha</span>
-                        <span class="stat-value best-streak">
-                            <i class="fas fa-trophy"></i> {{ habit.best_streak }} días
-                        </span>
+                    <div class="stat-item">
+                        <i class="fas fa-trophy"></i>
+                        <div class="stat-info">
+                            <h3>{{ habit.best_streak }}</h3>
+                            <p>Mejor Racha</p>
+                        </div>
                     </div>
-                    <div class="stat-display">
-                        <span class="stat-label">Creado</span>
-                        <span class="stat-value">
-                            {{ habit.created_at.strftime('%d/%m/%Y') }}
-                        </span>
-                    </div>
-                    <div class="stat-display">
-                        <span class="stat-label">Última actualización</span>
-                        <span class="stat-value">
-                            {{ habit.updated_at.strftime('%d/%m/%Y %H:%M') }}
-                        </span>
+                    <div class="stat-item">
+                        <i class="fas fa-calendar"></i>
+                        <div class="stat-info">
+                            <h3>{{ habit.created_at.strftime('%d/%m/%Y') }}</h3>
+                            <p>Creado el</p>
+                        </div>
                     </div>
                 </div>
             </div>
             
             <div class="form-actions">
-                <a href="{{ url_for('habits.list_habits') }}" class="btn btn-outline">
+                <a href="{{ url_for('index') }}" class="btn btn-outline">
                     Cancelar
                 </a>
                 <button type="submit" class="btn btn-primary">

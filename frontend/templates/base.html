@@ -10,6 +10,8 @@
     
     <!-- CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
     
     <!-- Font Awesome (icons) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -23,19 +25,19 @@
     <!-- Header/Navbar -->
     <nav class="navbar">
         <div class="container">
-            <a href="{{ url_for('habits.index') }}" class="logo">
+            <a href="{{ url_for('index') }}" class="logo">
                 <i class="fas fa-brain"></i>
                 <span>HabitIQ</span>
             </a>
             
             <div class="nav-links">
-                <a href="{{ url_for('habits.index') }}" class="nav-link">
-                    <i class="fas fa-home"></i> Dashboard
+                <a href="{{ url_for('index') }}" class="nav-link">
+                    <i class="fas fa-home"></i> Inicio
                 </a>
-                <a href="{{ url_for('habits.list_habits') }}" class="nav-link">
-                    <i class="fas fa-list"></i> Mis Hábitos
+                <a href="{{ url_for('dashboard') }}" class="nav-link">
+                    <i class="fas fa-chart-bar"></i> Dashboard
                 </a>
-                <a href="{{ url_for('habits.create_habit') }}" class="nav-link btn-new">
+                <a href="{{ url_for('create_habit') }}" class="nav-link btn-new">
                     <i class="fas fa-plus"></i> Nuevo Hábito
                 </a>
             </div>
