@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Leaderboard - HabitIQ{% endblock %}
+
+{% block content %}
+<div class="lb-page">
+
+    <div class="lb-header">
+        <div>
+            <h1><i class="fas fa-ranking-star"></i> Leaderboard</h1>
+            <p class="lb-subtitle">Compite con tus amigos por los mejores habitos</p>
+        </div>
+        <a href="{{ url_for('friends_page') }}" class="btn btn-outline">
+            <i class="fas fa-users"></i> Mis Amigos
+        </a>
+    </div>
+
+    {% if leaderboard|length > 1 %}
+    <!-- Podium (top 3) -->
+    <div class="lb-podium">
+        {% for entry in leaderboard[:3] %}
+        <div class="lb-podium-item rank-{{ loop.index }} {% if entry.is_me %}is-me{% endif %}">
+            <div class="lb-podium-medal">
+                {% if loop.index == 1 %}<i class="fas fa-crown"></i>
+                {% elif loop.index == 2 %}<i class="fas fa-medal"></i>
+                {% else %}<i class="fas fa-award"></i>{% endif %}
+            </div>
+            <div class="lb-podium-avatar" style="background:{{ entry.user.avatar_color or '#6366f1' }}">
+                <span>{{ entry.user.username[0]|upper }}</span>
+            </div>
+            <h3 class="lb-podium-name">{{ entry.user.username }}{% if entry.is_me %} (Tu){% endif %}</h3>
+            <div class="lb-podium-stats">
+                <span><i class="fas fa-check-double"></i> {{ entry.total_completions }}</span>
+                <span><i class="fas fa-fire"></i> {{ entry.best_streak }}</span>
+                <span><i class="fas fa-trophy"></i> {{ entry.achievements }}</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Full Table -->
+    <div class="lb-table-card">
+        <table class="lb-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Usuario</th>
+                    <th><i class="fas fa-check-double"></i> Total</th>
+                    <th><i class="fas fa-calendar-day"></i> Hoy</th>
+                    <th><i class="fas fa-fire"></i> Racha</th>
+                    <th><i class="fas fa-trophy"></i> Logros</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in leaderboard %}
+                <tr class="{% if entry.is_me %}lb-me{% endif %}">
+                    <td class="lb-rank">
+                        {% if loop.index <= 3 %}
+                            <span class="lb-rank-badge rank-{{ loop.index }}">{{ loop.index }}</span>
+                        {% else %}
+                            {{ loop.index }}
+                        {% endif %}
+                    </td>
+                    <td class="lb-user-cell">
+                        <div class="lb-user-row">
+                            <div class="lb-mini-avatar" style="background:{{ entry.user.avatar_color or '#6366f1' }}">
+                                <span>{{ entry.user.username[0]|upper }}</span>
+                            </div>
+                            <a href="{{ url_for('public_profile', username=entry.user.username) }}">{{ entry.user.username }}</a>
+                            {% if entry.is_me %}<span class="lb-you-tag">Tu</span>{% endif %}
+                        </div>
+                    </td>
+                    <td><strong>{{ entry.total_completions }}</strong></td>
+                    <td>{{ entry.today_done }}</td>
+                    <td><span class="lb-streak"><i class="fas fa-fire"></i> {{ entry.best_streak }}</span></td>
+                    <td>{{ entry.achievements }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if leaderboard|length <= 1 %}
+    <div class="lb-empty">
+        <div class="lb-empty-icon"><i class="fas fa-user-plus"></i></div>
+        <h3>Agrega amigos para competir</h3>
+        <p>El leaderboard muestra tu posicion entre tus amigos. Agrega amigos para empezar a competir.</p>
+        <a href="{{ url_for('friends_page') }}" class="btn btn-primary"><i class="fas fa-users"></i> Buscar Amigos</a>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

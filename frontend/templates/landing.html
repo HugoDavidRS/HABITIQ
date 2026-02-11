@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HabitIQ - Transforma tus Hábitos, Transforma tu Vida</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="land-nav">
+        <div class="land-container">
+            <a href="/" class="land-logo">
+                <i class="fas fa-brain"></i> HabitIQ
+            </a>
+            <div class="land-nav-links">
+                <a href="#features">Funciones</a>
+                <a href="#how">Como Funciona</a>
+                <a href="{{ url_for('pricing') }}">Planes</a>
+                <a href="{{ url_for('login') }}" class="land-btn-ghost">Iniciar Sesion</a>
+                <a href="{{ url_for('register') }}" class="land-btn-cta-sm">Empieza Gratis</a>
+            </div>
+            <button class="land-mobile-btn" id="landMobileBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-bg">
+            <div class="hero-orb hero-orb-1"></div>
+            <div class="hero-orb hero-orb-2"></div>
+            <div class="hero-orb hero-orb-3"></div>
+        </div>
+        <div class="land-container hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-rocket"></i> 1 mes gratis para nuevos usuarios
+            </div>
+            <h1>Transforma tus <span class="gradient-text">Habitos</span>,<br>Transforma tu <span class="gradient-text">Vida</span></h1>
+            <p class="hero-sub">La plataforma inteligente que te ayuda a construir habitos de sueno, ejercicio y productividad. Seguimiento visual, rachas motivadoras y estadisticas que impulsan tu progreso.</p>
+            <div class="hero-actions">
+                <a href="{{ url_for('register') }}" class="land-btn-cta">
+                    <i class="fas fa-bolt"></i> Unete a HabitIQ — Gratis por 1 Mes
+                </a>
+                <a href="#how" class="land-btn-secondary">
+                    <i class="fas fa-play-circle"></i> Ver como funciona
+                </a>
+            </div>
+            <div class="hero-trust">
+                <div class="trust-avatars">
+                    <div class="avatar" style="background:#6366f1;">H</div>
+                    <div class="avatar" style="background:#8b5cf6;">M</div>
+                    <div class="avatar" style="background:#a78bfa;">J</div>
+                    <div class="avatar" style="background:#c4b5fd;">L</div>
+                </div>
+                <span>+500 personas ya mejoran sus habitos</span>
+            </div>
+        </div>
+
+        <!-- Hero mockup -->
+        <div class="land-container">
+            <div class="hero-mockup">
+                <div class="mockup-bar">
+                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                    <span class="mockup-url">habitiq.app/dashboard</span>
+                </div>
+                <div class="mockup-content">
+                    <div class="mock-stat-row">
+                        <div class="mock-stat"><div class="mock-stat-icon" style="background:rgba(99,102,241,0.15);color:#818cf8;"><i class="fas fa-list-check"></i></div><div><span class="mock-num">12</span><span class="mock-label">Habitos</span></div></div>
+                        <div class="mock-stat"><div class="mock-stat-icon" style="background:rgba(16,185,129,0.15);color:#10b981;"><i class="fas fa-check-circle"></i></div><div><span class="mock-num">8</span><span class="mock-label">Hoy</span></div></div>
+                        <div class="mock-stat"><div class="mock-stat-icon" style="background:rgba(245,158,11,0.15);color:#f59e0b;"><i class="fas fa-fire"></i></div><div><span class="mock-num">21</span><span class="mock-label">Racha</span></div></div>
+                        <div class="mock-stat"><div class="mock-stat-icon" style="background:rgba(139,92,246,0.15);color:#8b5cf6;"><i class="fas fa-trophy"></i></div><div><span class="mock-num">95%</span><span class="mock-label">Exito</span></div></div>
+                    </div>
+                    <div class="mock-habits">
+                        <div class="mock-habit done"><span class="mock-check"><i class="fas fa-check"></i></span><span>Dormir 8 horas</span><span class="mock-streak"><i class="fas fa-fire"></i> 21</span></div>
+                        <div class="mock-habit done"><span class="mock-check"><i class="fas fa-check"></i></span><span>Ejercicio 30 min</span><span class="mock-streak"><i class="fas fa-fire"></i> 14</span></div>
+                        <div class="mock-habit done"><span class="mock-check"><i class="fas fa-check"></i></span><span>Meditar 10 min</span><span class="mock-streak"><i class="fas fa-fire"></i> 7</span></div>
+                        <div class="mock-habit"><span class="mock-check-empty"></span><span>Leer 20 paginas</span><span class="mock-streak"><i class="fas fa-fire"></i> 3</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+        <div class="land-container">
+            <div class="section-label"><i class="fas fa-star"></i> Funciones</div>
+            <h2>Todo lo que necesitas para <span class="gradient-text">mejorar</span></h2>
+            <p class="section-sub">Herramientas disenadas para que construir buenos habitos sea simple, visual y motivador.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-moon"></i></div>
+                    <h3>Habitos de Sueno</h3>
+                    <p>Registra tus horas de sueno y crea rutinas nocturnas saludables. Tu cuerpo te lo agradecera.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-dumbbell"></i></div>
+                    <h3>Entrenamiento Fisico</h3>
+                    <p>Sigue tu progreso de ejercicio diario. Desde caminatas hasta entrenamientos intensos.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-fire"></i></div>
+                    <h3>Rachas Motivadoras</h3>
+                    <p>Mantener tu racha te motiva a no romper la cadena. Cada dia cuenta.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3>Estadisticas Detalladas</h3>
+                    <p>Dashboard con graficas y datos de tu progreso. Ve como mejoras semana a semana.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-brain"></i></div>
+                    <h3>Categorias Inteligentes</h3>
+                    <p>Organiza tus habitos por salud, fitness, productividad, mindfulness y mas.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <h3>100% Responsive</h3>
+                    <p>Accede desde cualquier dispositivo. Escritorio, tablet o movil — siempre disponible.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="how-it-works" id="how">
+        <div class="land-container">
+            <div class="section-label"><i class="fas fa-route"></i> Proceso</div>
+            <h2>Empieza en <span class="gradient-text">3 pasos</span></h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Crea tu cuenta gratis</h3>
+                    <p>Registrate en segundos. Sin tarjeta de credito. 1 mes completamente gratis.</p>
+                </div>
+                <div class="step-arrow"><i class="fas fa-chevron-right"></i></div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Define tus habitos</h3>
+                    <p>Agrega los habitos que quieres mejorar: sueno, ejercicio, lectura, meditacion...</p>
+                </div>
+                <div class="step-arrow"><i class="fas fa-chevron-right"></i></div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Marca tu progreso</h3>
+                    <p>Cada dia marca tus habitos completados. Construye rachas y ve tu transformacion.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social proof -->
+    <section class="social-proof">
+        <div class="land-container">
+            <div class="section-label"><i class="fas fa-heart"></i> Testimonios</div>
+            <h2>Lo que dicen nuestros <span class="gradient-text">usuarios</span></h2>
+            <div class="testimonials">
+                <div class="testimonial">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p>"Llevo 3 semanas durmiendo 8 horas gracias al seguimiento de HabitIQ. Mi energia cambio completamente."</p>
+                    <div class="testimonial-author">
+                        <div class="avatar" style="background:#6366f1;">M</div>
+                        <div><strong>Maria G.</strong><span>Racha de 21 dias</span></div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p>"El sistema de rachas es adictivo. No quiero romper mi racha de 45 dias de ejercicio."</p>
+                    <div class="testimonial-author">
+                        <div class="avatar" style="background:#8b5cf6;">C</div>
+                        <div><strong>Carlos R.</strong><span>Racha de 45 dias</span></div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p>"Simple pero poderosa. Me ayudo a organizar mi rutina matutina y ser mas productiva."</p>
+                    <div class="testimonial-author">
+                        <div class="avatar" style="background:#a78bfa;">L</div>
+                        <div><strong>Laura P.</strong><span>Racha de 30 dias</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Final -->
+    <section class="final-cta">
+        <div class="land-container">
+            <div class="cta-card">
+                <h2>Empieza hoy. <span class="gradient-text">Gratis.</span></h2>
+                <p>Unete a cientos de personas que ya estan transformando sus habitos con HabitIQ. Tu primer mes es completamente gratis.</p>
+                <div class="cta-actions">
+                    <a href="{{ url_for('register') }}" class="land-btn-cta">
+                        <i class="fas fa-bolt"></i> Crear Cuenta Gratis
+                    </a>
+                    <a href="{{ url_for('pricing') }}" class="land-btn-secondary">
+                        Ver Planes <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                <p class="cta-note"><i class="fas fa-shield-alt"></i> Sin tarjeta de credito. Cancela cuando quieras.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="land-footer">
+        <div class="land-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="/" class="land-logo"><i class="fas fa-brain"></i> HabitIQ</a>
+                    <p>La plataforma inteligente para construir mejores habitos y transformar tu vida.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Producto</h4>
+                    <a href="#features">Funciones</a>
+                    <a href="{{ url_for('pricing') }}">Planes</a>
+                    <a href="#how">Como Funciona</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Cuenta</h4>
+                    <a href="{{ url_for('register') }}">Registrarse</a>
+                    <a href="{{ url_for('login') }}">Iniciar Sesion</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 HabitIQ. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('landMobileBtn').addEventListener('click', function() {
+            document.querySelector('.land-nav-links').classList.toggle('active');
+            const icon = this.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+    </script>
+</body>
+</html>

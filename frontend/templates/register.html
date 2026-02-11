@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Registro - HabitIQ{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+    <div class="auth-container">
+        <div class="auth-header">
+            <div class="auth-logo">
+                <i class="fas fa-brain"></i>
+                <h1>HabitIQ</h1>
+            </div>
+            <p class="auth-subtitle">Crea tu cuenta y empieza a mejorar tus hábitos</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('register') }}" class="auth-form">
+            <div class="form-group">
+                <label for="username">
+                    <i class="fas fa-user"></i> Nombre de usuario
+                </label>
+                <input type="text" 
+                       id="username" 
+                       name="username" 
+                       required
+                       minlength="3"
+                       maxlength="80"
+                       placeholder="Tu nombre de usuario"
+                       class="form-input"
+                       autocomplete="username">
+                <small class="form-help">Mínimo 3 caracteres</small>
+            </div>
+
+            <div class="form-group">
+                <label for="email">
+                    <i class="fas fa-envelope"></i> Email
+                </label>
+                <input type="email" 
+                       id="email" 
+                       name="email" 
+                       required
+                       placeholder="tu@email.com"
+                       class="form-input"
+                       autocomplete="email">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">
+                    <i class="fas fa-lock"></i> Contraseña
+                </label>
+                <input type="password" 
+                       id="password" 
+                       name="password" 
+                       required
+                       minlength="6"
+                       placeholder="Mínimo 6 caracteres"
+                       class="form-input"
+                       autocomplete="new-password">
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password">
+                    <i class="fas fa-lock"></i> Confirmar contraseña
+                </label>
+                <input type="password" 
+                       id="confirm_password" 
+                       name="confirm_password" 
+                       required
+                       minlength="6"
+                       placeholder="Repite tu contraseña"
+                       class="form-input"
+                       autocomplete="new-password">
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-block">
+                <i class="fas fa-user-plus"></i> Crear Cuenta
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            <p>¿Ya tienes cuenta? <a href="{{ url_for('login') }}" class="auth-link">Inicia sesión</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

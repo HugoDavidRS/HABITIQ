@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Mi Perfil - HabitIQ{% endblock %}
+
+{% block content %}
+<div class="profile-page">
+
+    <!-- Profile Header -->
+    <div class="profile-header-card">
+        <div class="profile-avatar" style="background:{{ current_user.avatar_color }}">
+            <span>{{ current_user.username[0]|upper }}</span>
+        </div>
+        <div class="profile-header-info">
+            <h1>{{ current_user.username }}</h1>
+            <p class="profile-email">{{ current_user.email }}</p>
+            {% if current_user.bio %}
+            <p class="profile-bio">{{ current_user.bio }}</p>
+            {% endif %}
+            <div class="profile-meta">
+                <span><i class="fas fa-calendar-alt"></i> Miembro desde {{ current_user.created_at.strftime('%B %Y') }}</span>
+                <span><i class="fas fa-{{ 'globe' if current_user.is_public else 'lock' }}"></i> Perfil {{ 'publico' if current_user.is_public else 'privado' }}</span>
+            </div>
+        </div>
+        <a href="{{ url_for('public_profile', username=current_user.username) }}" class="btn btn-outline profile-view-btn">
+            <i class="fas fa-eye"></i> Ver perfil publico
+        </a>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="profile-stats-row">
+        <div class="profile-stat-box">
+            <span class="profile-stat-num">{{ total_habits }}</span>
+            <span class="profile-stat-label">Habitos</span>
+        </div>
+        <div class="profile-stat-box">
+            <span class="profile-stat-num">{{ total_completions }}</span>
+            <span class="profile-stat-label">Completaciones</span>
+        </div>
+        <div class="profile-stat-box">
+            <span class="profile-stat-num">{{ best_streak }}</span>
+            <span class="profile-stat-label">Mejor Racha</span>
+        </div>
+        <div class="profile-stat-box">
+            <span class="profile-stat-num">{{ friends|length }}</span>
+            <span class="profile-stat-label">Amigos</span>
+        </div>
+    </div>
+
+    <div class="profile-grid">
+
+        <!-- Edit Profile -->
+        <section class="profile-section">
+            <h2><i class="fas fa-user-edit"></i> Editar Perfil</h2>
+            <form method="POST" class="profile-form">
+                <input type="hidden" name="action" value="update_profile">
+                <div class="form-group">
+                    <label for="bio">Bio</label>
+                    <textarea id="bio" name="bio" rows="3" maxlength="300" placeholder="Cuentanos sobre ti...">{{ current_user.bio or '' }}</textarea>
+                    <small class="form-hint">Maximo 300 caracteres</small>
+                </div>
+                <div class="form-group">
+                    <label for="avatar_color">Color de avatar</label>
+                    <div class="color-picker-row">
+                        {% for color in ['#6366f1','#8b5cf6','#ec4899','#ef4444','#f59e0b','#10b981','#06b6d4','#3b82f6'] %}
+                        <label class="color-option">
+                            <input type="radio" name="avatar_color" value="{{ color }}" {% if current_user.avatar_color == color %}checked{% endif %}>
+                            <span class="color-swatch" style="background:{{ color }}"></span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="toggle-label">
+                        <input type="checkbox" name="is_public" {% if current_user.is_public %}checked{% endif %}>
+                        <span class="toggle-switch"></span>
+                        <span>Perfil publico</span>
+                    </label>
+                    <small class="form-hint">Permite que tus amigos vean tus logros y rachas</small>
+                </div>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar Cambios</button>
+            </form>
+        </section>
+
+        <!-- Change Password -->
+        <section class="profile-section">
+            <h2><i class="fas fa-lock"></i> Cambiar Contrasena</h2>
+            <form method="POST" class="profile-form">
+                <input type="hidden" name="action" value="change_password">
+                <div class="form-group">
+                    <label for="current_password">Contrasena actual</label>
+                    <input type="password" id="current_password" name="current_password" required>
+                </div>
+                <div class="form-group">
+                    <label for="new_password">Nueva contrasena</label>
+                    <input type="password" id="new_password" name="new_password" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password">Confirmar nueva contrasena</label>
+                    <input type="password" id="confirm_password" name="confirm_password" required>
+                </div>
+                <button type="submit" class="btn btn-outline"><i class="fas fa-key"></i> Actualizar Contrasena</button>
+            </form>
+        </section>
+
+    </div>
+
+    <!-- Achievements -->
+    <section class="profile-section profile-achievements-section">
+        <h2><i class="fas fa-trophy"></i> Logros ({{ earned_ids|length }}/{{ all_achievements|length }})</h2>
+        <div class="achievements-grid">
+            {% for ach in all_achievements %}
+            <div class="achievement-card {% if ach.id in earned_ids %}earned{% else %}locked{% endif %}">
+                <div class="achievement-icon" style="{% if ach.id in earned_ids %}background:{{ ach.color }}20;color:{{ ach.color }}{% endif %}">
+                    <i class="fas {{ ach.icon }}"></i>
+                </div>
+                <div class="achievement-info">
+                    <h4>{{ ach.name }}</h4>
+                    <p>{{ ach.description }}</p>
+                </div>
+                {% if ach.id in earned_ids %}
+                <span class="achievement-check"><i class="fas fa-check-circle"></i></span>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+</div>
+{% endblock %}

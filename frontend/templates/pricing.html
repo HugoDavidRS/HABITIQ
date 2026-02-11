@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planes y Precios - HabitIQ</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="land-nav">
+        <div class="land-container">
+            <a href="/" class="land-logo"><i class="fas fa-brain"></i> HabitIQ</a>
+            <div class="land-nav-links">
+                <a href="/#features">Funciones</a>
+                <a href="/#how">Como Funciona</a>
+                <a href="{{ url_for('pricing') }}" class="active">Planes</a>
+                <a href="{{ url_for('login') }}" class="land-btn-ghost">Iniciar Sesion</a>
+                <a href="{{ url_for('register') }}" class="land-btn-cta-sm">Empieza Gratis</a>
+            </div>
+            <button class="land-mobile-btn" id="landMobileBtn"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <!-- Pricing Hero -->
+    <section class="pricing-hero">
+        <div class="land-container">
+            <div class="section-label"><i class="fas fa-tags"></i> Planes</div>
+            <h1>Un plan para cada <span class="gradient-text">objetivo</span></h1>
+            <p class="section-sub">Empieza gratis y escala cuando lo necesites. Sin compromisos, cancela cuando quieras.</p>
+            
+            <!-- Toggle -->
+            <div class="billing-toggle">
+                <span class="toggle-label active" id="monthlyLabel">Mensual</span>
+                <button class="toggle-switch" id="billingToggle">
+                    <span class="toggle-dot"></span>
+                </button>
+                <span class="toggle-label" id="annualLabel">Anual <span class="save-badge">-25%</span></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Cards -->
+    <section class="pricing-cards">
+        <div class="land-container">
+            <div class="plans-grid">
+                <!-- Free -->
+                <div class="plan-card">
+                    <div class="plan-header">
+                        <div class="plan-icon" style="background:rgba(100,116,139,0.12);color:#94a3b8;"><i class="fas fa-seedling"></i></div>
+                        <h3>Gratis</h3>
+                        <p class="plan-desc">Perfecto para empezar</p>
+                    </div>
+                    <div class="plan-price">
+                        <span class="price">$0</span>
+                        <span class="period">/ siempre</span>
+                    </div>
+                    <ul class="plan-features">
+                        <li class="included"><i class="fas fa-check"></i> Hasta 3 habitos</li>
+                        <li class="included"><i class="fas fa-check"></i> Seguimiento diario</li>
+                        <li class="included"><i class="fas fa-check"></i> Rachas basicas</li>
+                        <li class="included"><i class="fas fa-check"></i> 1 categoria</li>
+                        <li class="not-included"><i class="fas fa-times"></i> Dashboard avanzado</li>
+                        <li class="not-included"><i class="fas fa-times"></i> Estadisticas detalladas</li>
+                        <li class="not-included"><i class="fas fa-times"></i> Exportar datos</li>
+                        <li class="not-included"><i class="fas fa-times"></i> Soporte prioritario</li>
+                    </ul>
+                    <a href="{{ url_for('register') }}" class="plan-btn plan-btn-outline">Empezar Gratis</a>
+                </div>
+
+                <!-- Pro (Popular) -->
+                <div class="plan-card featured">
+                    <div class="plan-popular">Mas Popular</div>
+                    <div class="plan-header">
+                        <div class="plan-icon" style="background:rgba(99,102,241,0.15);color:#818cf8;"><i class="fas fa-rocket"></i></div>
+                        <h3>Pro</h3>
+                        <p class="plan-desc">Para quien va en serio</p>
+                    </div>
+                    <div class="plan-price">
+                        <span class="price monthly-price">$4.99</span>
+                        <span class="price annual-price" style="display:none;">$3.74</span>
+                        <span class="period monthly-period">/ mes</span>
+                        <span class="period annual-period" style="display:none;">/ mes</span>
+                    </div>
+                    <div class="plan-trial">
+                        <i class="fas fa-gift"></i> Primer mes GRATIS
+                    </div>
+                    <ul class="plan-features">
+                        <li class="included"><i class="fas fa-check"></i> Habitos ilimitados</li>
+                        <li class="included"><i class="fas fa-check"></i> Todas las categorias</li>
+                        <li class="included"><i class="fas fa-check"></i> Dashboard completo</li>
+                        <li class="included"><i class="fas fa-check"></i> Estadisticas avanzadas</li>
+                        <li class="included"><i class="fas fa-check"></i> Rachas y logros</li>
+                        <li class="included"><i class="fas fa-check"></i> Recordatorios</li>
+                        <li class="not-included"><i class="fas fa-times"></i> Exportar datos</li>
+                        <li class="not-included"><i class="fas fa-times"></i> API acceso</li>
+                    </ul>
+                    <a href="{{ url_for('register') }}" class="plan-btn plan-btn-primary">
+                        <i class="fas fa-bolt"></i> Probar 1 Mes Gratis
+                    </a>
+                </div>
+
+                <!-- Premium -->
+                <div class="plan-card">
+                    <div class="plan-header">
+                        <div class="plan-icon" style="background:rgba(245,158,11,0.12);color:#f59e0b;"><i class="fas fa-crown"></i></div>
+                        <h3>Premium</h3>
+                        <p class="plan-desc">Maximo rendimiento</p>
+                    </div>
+                    <div class="plan-price">
+                        <span class="price monthly-price">$9.99</span>
+                        <span class="price annual-price" style="display:none;">$7.49</span>
+                        <span class="period monthly-period">/ mes</span>
+                        <span class="period annual-period" style="display:none;">/ mes</span>
+                    </div>
+                    <ul class="plan-features">
+                        <li class="included"><i class="fas fa-check"></i> Todo lo del Pro</li>
+                        <li class="included"><i class="fas fa-check"></i> Exportar datos (CSV/PDF)</li>
+                        <li class="included"><i class="fas fa-check"></i> API acceso completo</li>
+                        <li class="included"><i class="fas fa-check"></i> Integraciones</li>
+                        <li class="included"><i class="fas fa-check"></i> Temas personalizados</li>
+                        <li class="included"><i class="fas fa-check"></i> Soporte prioritario 24/7</li>
+                        <li class="included"><i class="fas fa-check"></i> Habitos compartidos</li>
+                        <li class="included"><i class="fas fa-check"></i> Reportes semanales</li>
+                    </ul>
+                    <a href="{{ url_for('register') }}" class="plan-btn plan-btn-outline">Elegir Premium</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison -->
+    <section class="comparison">
+        <div class="land-container">
+            <h2>Comparacion <span class="gradient-text">detallada</span></h2>
+            <div class="comparison-table-wrap">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Funcion</th>
+                            <th>Gratis</th>
+                            <th class="highlight">Pro</th>
+                            <th>Premium</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Habitos</td><td>3</td><td class="highlight">Ilimitados</td><td>Ilimitados</td></tr>
+                        <tr><td>Categorias</td><td>1</td><td class="highlight">Todas</td><td>Todas + Custom</td></tr>
+                        <tr><td>Dashboard</td><td>Basico</td><td class="highlight">Completo</td><td>Avanzado</td></tr>
+                        <tr><td>Rachas</td><td><i class="fas fa-check text-success"></i></td><td class="highlight"><i class="fas fa-check text-success"></i></td><td><i class="fas fa-check text-success"></i></td></tr>
+                        <tr><td>Estadisticas</td><td>Basicas</td><td class="highlight">Avanzadas</td><td>Completas + IA</td></tr>
+                        <tr><td>Recordatorios</td><td><i class="fas fa-times text-muted"></i></td><td class="highlight"><i class="fas fa-check text-success"></i></td><td><i class="fas fa-check text-success"></i></td></tr>
+                        <tr><td>Exportar datos</td><td><i class="fas fa-times text-muted"></i></td><td class="highlight"><i class="fas fa-times text-muted"></i></td><td><i class="fas fa-check text-success"></i></td></tr>
+                        <tr><td>API</td><td><i class="fas fa-times text-muted"></i></td><td class="highlight"><i class="fas fa-times text-muted"></i></td><td><i class="fas fa-check text-success"></i></td></tr>
+                        <tr><td>Soporte</td><td>Comunidad</td><td class="highlight">Email</td><td>Prioritario 24/7</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq">
+        <div class="land-container">
+            <h2>Preguntas <span class="gradient-text">frecuentes</span></h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h4><i class="fas fa-circle-question"></i> ¿Realmente es gratis el primer mes?</h4>
+                    <p>Si, completamente. Crea tu cuenta, usa todas las funciones Pro por 30 dias sin costo. No pedimos tarjeta de credito.</p>
+                </div>
+                <div class="faq-item">
+                    <h4><i class="fas fa-circle-question"></i> ¿Puedo cancelar cuando quiera?</h4>
+                    <p>Absolutamente. Sin contratos ni penalizaciones. Cancelas y sigues usando el plan gratuito para siempre.</p>
+                </div>
+                <div class="faq-item">
+                    <h4><i class="fas fa-circle-question"></i> ¿Mis datos estan seguros?</h4>
+                    <p>Usamos encriptacion de grado bancario y servidores seguros. Tus datos nunca se comparten con terceros.</p>
+                </div>
+                <div class="faq-item">
+                    <h4><i class="fas fa-circle-question"></i> ¿Funciona en movil?</h4>
+                    <p>Si, HabitIQ es 100% responsive. Funciona perfecto en cualquier dispositivo con navegador web.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="final-cta">
+        <div class="land-container">
+            <div class="cta-card">
+                <h2>¿Listo para <span class="gradient-text">transformarte</span>?</h2>
+                <p>Empieza con el plan Pro gratis por 1 mes. Sin tarjeta, sin compromisos.</p>
+                <a href="{{ url_for('register') }}" class="land-btn-cta"><i class="fas fa-bolt"></i> Comenzar Ahora — Gratis</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="land-footer">
+        <div class="land-container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 HabitIQ. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu
+        document.getElementById('landMobileBtn').addEventListener('click', function() {
+            document.querySelector('.land-nav-links').classList.toggle('active');
+            const icon = this.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        });
+
+        // Billing toggle
+        const toggle = document.getElementById('billingToggle');
+        let isAnnual = false;
+        toggle.addEventListener('click', function() {
+            isAnnual = !isAnnual;
+            this.classList.toggle('active', isAnnual);
+            document.getElementById('monthlyLabel').classList.toggle('active', !isAnnual);
+            document.getElementById('annualLabel').classList.toggle('active', isAnnual);
+            
+            document.querySelectorAll('.monthly-price, .monthly-period').forEach(el => el.style.display = isAnnual ? 'none' : '');
+            document.querySelectorAll('.annual-price, .annual-period').forEach(el => el.style.display = isAnnual ? '' : 'none');
+        });
+    </script>
+</body>
+</html>

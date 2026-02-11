@@ -17,32 +17,55 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     
     {% block extra_css %}{% endblock %}
 </head>
 <body>
+    {% if current_user.is_authenticated %}
     <!-- Header/Navbar -->
     <nav class="navbar">
         <div class="container">
-            <a href="{{ url_for('index') }}" class="logo">
+            <a href="{{ url_for('habits_app') }}" class="logo">
                 <i class="fas fa-brain"></i>
                 <span>HabitIQ</span>
             </a>
+
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+                <i class="fas fa-bars"></i>
+            </button>
             
-            <div class="nav-links">
-                <a href="{{ url_for('index') }}" class="nav-link">
+            <div class="nav-links" id="navLinks">
+                <a href="{{ url_for('habits_app') }}" class="nav-link">
                     <i class="fas fa-home"></i> Inicio
                 </a>
                 <a href="{{ url_for('dashboard') }}" class="nav-link">
                     <i class="fas fa-chart-bar"></i> Dashboard
                 </a>
+                <a href="{{ url_for('friends_page') }}" class="nav-link">
+                    <i class="fas fa-users"></i> Amigos
+                </a>
+                <a href="{{ url_for('leaderboard') }}" class="nav-link">
+                    <i class="fas fa-ranking-star"></i> Ranking
+                </a>
                 <a href="{{ url_for('create_habit') }}" class="nav-link btn-new">
                     <i class="fas fa-plus"></i> Nuevo Hábito
                 </a>
+                <div class="nav-user">
+                    <a href="{{ url_for('profile') }}" class="user-greeting">
+                        <i class="fas fa-user-circle"></i> {{ current_user.username }}
+                    </a>
+                    <a href="{{ url_for('logout') }}" class="nav-link btn-logout">
+                        <i class="fas fa-sign-out-alt"></i> Salir
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
+    {% endif %}
 
     <!-- Flash Messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -70,13 +93,26 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>HabitIQ &copy; 2024 - Gestión Inteligente de Hábitos</p>
-            <p class="footer-sub">Desarrollado con Flask y Python</p>
+            <p>HabitIQ &copy; 2025 - Gestión Inteligente de Hábitos</p>
+            <p class="footer-sub">Mejora tus hábitos, mejora tu vida</p>
         </div>
     </footer>
 
     <!-- JavaScript -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+        // Mobile menu toggle
+        const toggle = document.getElementById('mobileToggle');
+        const navLinks = document.getElementById('navLinks');
+        if (toggle && navLinks) {
+            toggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                const icon = toggle.querySelector('i');
+                icon.classList.toggle('fa-bars');
+                icon.classList.toggle('fa-times');
+            });
+        }
+    </script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

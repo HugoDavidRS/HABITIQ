@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Amigos - HabitIQ{% endblock %}
+
+{% block content %}
+<div class="friends-page">
+
+    <div class="friends-header">
+        <div>
+            <h1><i class="fas fa-users"></i> Amigos</h1>
+            <p class="friends-subtitle">Conecta con otros usuarios y compite por los mejores habitos</p>
+        </div>
+        <a href="{{ url_for('leaderboard') }}" class="btn btn-outline">
+            <i class="fas fa-ranking-star"></i> Leaderboard
+        </a>
+    </div>
+
+    <!-- Search -->
+    <div class="friends-search-card">
+        <h3><i class="fas fa-search"></i> Buscar Usuarios</h3>
+        <form action="{{ url_for('search_users') }}" method="GET" class="friends-search-form">
+            <input type="text" name="q" placeholder="Buscar por nombre de usuario..." value="{{ search_query|default('') }}" minlength="2" required>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
+        </form>
+
+        {% if search_results is defined %}
+        <div class="search-results">
+            {% if search_results %}
+                {% for user in search_results %}
+                <div class="friend-row">
+                    <div class="friend-avatar" style="background:{{ user.avatar_color or '#6366f1' }}">
+                        <span>{{ user.username[0]|upper }}</span>
+                    </div>
+                    <div class="friend-info">
+                        <a href="{{ url_for('public_profile', username=user.username) }}" class="friend-name">{{ user.username }}</a>
+                        {% if user.bio %}<p class="friend-bio">{{ user.bio[:80] }}</p>{% endif %}
+                    </div>
+                    <div class="friend-action">
+                        {% if user.friendship_status == 'accepted' %}
+                            <span class="badge badge-success"><i class="fas fa-check"></i> Amigos</span>
+                        {% elif user.friendship_status == 'pending' %}
+                            <span class="badge badge-warning"><i class="fas fa-clock"></i> Pendiente</span>
+                        {% else %}
+                            <form action="{{ url_for('send_friend_request', user_id=user.id) }}" method="POST" style="display:inline">
+                                <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-user-plus"></i> Agregar</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="search-empty">No se encontraron usuarios con "{{ search_query }}"</p>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Pending Requests -->
+    {% if pending %}
+    <section class="friends-section">
+        <h2><i class="fas fa-bell"></i> Solicitudes Pendientes <span class="badge badge-accent">{{ pending|length }}</span></h2>
+        <div class="friends-list">
+            {% for req in pending %}
+            <div class="friend-row pending-row">
+                <div class="friend-avatar" style="background:{{ req.sender.avatar_color or '#6366f1' }}">
+                    <span>{{ req.sender.username[0]|upper }}</span>
+                </div>
+                <div class="friend-info">
+                    <a href="{{ url_for('public_profile', username=req.sender.username) }}" class="friend-name">{{ req.sender.username }}</a>
+                    <p class="friend-bio">Quiere ser tu amigo</p>
+                </div>
+                <div class="friend-actions-btns">
+                    <form action="{{ url_for('accept_friend', friendship_id=req.id) }}" method="POST" style="display:inline">
+                        <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-check"></i> Aceptar</button>
+                    </form>
+                    <form action="{{ url_for('reject_friend', friendship_id=req.id) }}" method="POST" style="display:inline">
+                        <button type="submit" class="btn btn-outline btn-sm"><i class="fas fa-times"></i> Rechazar</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Friends List -->
+    <section class="friends-section">
+        <h2><i class="fas fa-user-friends"></i> Mis Amigos ({{ friends|length }})</h2>
+        {% if friends %}
+        <div class="friends-list">
+            {% for friend in friends %}
+            <div class="friend-row">
+                <div class="friend-avatar" style="background:{{ friend.avatar_color or '#6366f1' }}">
+                    <span>{{ friend.username[0]|upper }}</span>
+                </div>
+                <div class="friend-info">
+                    <a href="{{ url_for('public_profile', username=friend.username) }}" class="friend-name">{{ friend.username }}</a>
+                    {% if friend.bio %}<p class="friend-bio">{{ friend.bio[:80] }}</p>{% endif %}
+                </div>
+                <div class="friend-actions-btns">
+                    <a href="{{ url_for('public_profile', username=friend.username) }}" class="btn btn-outline btn-sm"><i class="fas fa-eye"></i> Ver</a>
+                    <form action="{{ url_for('remove_friend', user_id=friend.id) }}" method="POST" style="display:inline" onsubmit="return confirm('Eliminar a {{ friend.username }} de tus amigos?')">
+                        <button type="submit" class="btn btn-outline btn-sm btn-danger-outline"><i class="fas fa-user-minus"></i></button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="friends-empty">
+            <div class="friends-empty-icon"><i class="fas fa-user-plus"></i></div>
+            <h4>Aun no tienes amigos</h4>
+            <p>Busca usuarios por su nombre para enviar solicitudes de amistad.</p>
+        </div>
+        {% endif %}
+    </section>
+
+</div>
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}{{ profile_user.username }} - HabitIQ{% endblock %}
+
+{% block content %}
+<div class="pub-profile">
+
+    <!-- Back -->
+    <a href="{{ url_for('friends_page') }}" class="back-link"><i class="fas fa-arrow-left"></i> Volver a Amigos</a>
+
+    <!-- Profile Card -->
+    <div class="pub-header-card">
+        <div class="pub-avatar" style="background:{{ profile_user.avatar_color or '#6366f1' }}">
+            <span>{{ profile_user.username[0]|upper }}</span>
+        </div>
+        <div class="pub-header-info">
+            <h1>{{ profile_user.username }}</h1>
+            {% if profile_user.bio %}
+            <p class="pub-bio">{{ profile_user.bio }}</p>
+            {% endif %}
+            <p class="pub-member"><i class="fas fa-calendar-alt"></i> Miembro hace {{ days_member }} dias</p>
+        </div>
+        {% if current_user.id != profile_user.id %}
+        <div class="pub-action">
+            {% if friendship and friendship.status == 'accepted' %}
+                <span class="badge badge-success"><i class="fas fa-check"></i> Amigos</span>
+            {% elif friendship and friendship.status == 'pending' %}
+                <span class="badge badge-warning"><i class="fas fa-clock"></i> Pendiente</span>
+            {% else %}
+                <form action="{{ url_for('send_friend_request', user_id=profile_user.id) }}" method="POST">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-user-plus"></i> Agregar Amigo</button>
+                </form>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Stats -->
+    <div class="pub-stats-row">
+        <div class="pub-stat">
+            <i class="fas fa-list-check"></i>
+            <span class="pub-stat-num">{{ total_habits }}</span>
+            <span class="pub-stat-label">Habitos</span>
+        </div>
+        <div class="pub-stat">
+            <i class="fas fa-check-double"></i>
+            <span class="pub-stat-num">{{ total_completions }}</span>
+            <span class="pub-stat-label">Completaciones</span>
+        </div>
+        <div class="pub-stat">
+            <i class="fas fa-fire"></i>
+            <span class="pub-stat-num">{{ best_streak }}</span>
+            <span class="pub-stat-label">Mejor Racha</span>
+        </div>
+        <div class="pub-stat">
+            <i class="fas fa-bolt"></i>
+            <span class="pub-stat-num">{{ active_habits }}</span>
+            <span class="pub-stat-label">Activos</span>
+        </div>
+    </div>
+
+    <div class="pub-grid">
+
+        <!-- Top Habits -->
+        <section class="pub-section">
+            <h2><i class="fas fa-star"></i> Top Habitos</h2>
+            {% if top_habits %}
+            <div class="pub-habits-list">
+                {% for habit in top_habits %}
+                <div class="pub-habit-row">
+                    <span class="pub-habit-rank">#{{ loop.index }}</span>
+                    <div class="pub-habit-info">
+                        <h4>{{ habit.name }}</h4>
+                        <span class="dash-cat-badge category-{{ habit.category }}">{{ habit.category|capitalize }}</span>
+                    </div>
+                    <div class="pub-habit-streak">
+                        <i class="fas fa-fire"></i> {{ habit.best_streak }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="pub-empty">Este usuario aun no tiene habitos.</p>
+            {% endif %}
+        </section>
+
+        <!-- Achievements -->
+        <section class="pub-section">
+            <h2><i class="fas fa-trophy"></i> Logros ({{ earned_achievements|length }})</h2>
+            {% if earned_achievements %}
+            <div class="pub-achievements">
+                {% for ua in earned_achievements %}
+                <div class="pub-ach-badge" style="background:{{ ua.achievement.color }}20;color:{{ ua.achievement.color }}" title="{{ ua.achievement.description }}">
+                    <i class="fas {{ ua.achievement.icon }}"></i>
+                    <span>{{ ua.achievement.name }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="pub-empty">Aun no ha desbloqueado logros.</p>
+            {% endif %}
+        </section>
+
+    </div>
+
+</div>
+{% endblock %}
