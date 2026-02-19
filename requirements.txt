@@ -28,3 +28,4 @@ Flask-DebugToolbar==0.13.1
 # === UTILIDADES ===
 python-dateutil==2.8.2
 six==1.16.0
+psycopg2-binary==2.9.7

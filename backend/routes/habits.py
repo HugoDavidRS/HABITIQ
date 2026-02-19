@@ -4,6 +4,7 @@ Controladores que manejan las peticiones HTTP.
 """
 
 from flask import Blueprint, render_template, request, jsonify, redirect, url_for, flash
+from datetime import datetime
 from backend.services.habit_service import HabitService
 
 # Crear Blueprint para organizar rutas

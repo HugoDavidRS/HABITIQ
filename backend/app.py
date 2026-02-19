@@ -18,6 +18,8 @@ from flask import Flask, render_template, request, redirect, url_for, flash, jso
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
+from backend.database.db import db, init_app
+import sqlalchemy
 
 # Crear aplicación Flask
 app = Flask(__name__,
@@ -30,8 +32,25 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:/
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 280, 'pool_pre_ping': True}
 
+# Probar conexión a la base de datos indicada en .env. Si falla, usar
+# fallback a SQLite local para que la app pueda arrancar y el usuario pueda
+# seguir trabajando localmente.
+db_url = app.config['SQLALCHEMY_DATABASE_URI']
+try:
+    # Intento rápido de conexión (timeout corto)
+    engine = sqlalchemy.create_engine(db_url, connect_args={"connect_timeout": 5})
+    conn = engine.connect()
+    conn.close()
+    print(f"✅ Conexión a la base de datos OK: {db_url}")
+except Exception as e:
+    print("⚠️ No se pudo conectar a la BD remota:", str(e))
+    # Fallback a SQLite local
+    fallback = 'sqlite:///../backend/database/habits.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = fallback
+    print(f"Usando base de datos local de fallback: {app.config['SQLALCHEMY_DATABASE_URI']}")
+
 # Inicializar extensiones
-db = SQLAlchemy(app)
+init_app(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 login_manager.login_message = 'Inicia sesión para acceder a esta página'
@@ -853,10 +872,14 @@ def health():
 
 # Función para crear tablas
 def create_tables():
-    with app.app_context():
-        db.create_all()
-        seed_achievements()
-        print("✅ Tablas y logros creados")
+    try:
+        with app.app_context():
+            db.create_all()
+            seed_achievements()
+            print("✅ Tablas y logros creados")
+    except Exception as e:
+        print("⚠️ No se pudieron crear las tablas en create_tables():", str(e))
+        print("Continuando sin inicializar la DB. Revisa la conexión a Supabase.")
 
 if __name__ == '__main__':
     # Crear tablas si no existen (comentado temporalmente por problemas de conexión a Supabase)
