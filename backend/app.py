@@ -859,8 +859,8 @@ def create_tables():
         print("✅ Tablas y logros creados")
 
 if __name__ == '__main__':
-    # Crear tablas si no existen
-    create_tables()
+    # Crear tablas si no existen (comentado temporalmente por problemas de conexión a Supabase)
+    # create_tables()
     
     db_url = app.config['SQLALCHEMY_DATABASE_URI']
     db_type = "PostgreSQL (Supabase)" if "postgresql" in db_url else "SQLite (local)"
